@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "^18.3.1",
+    "react-animated-cursor": "^2.2.0",
+    "react-dom": "^18.3.1",
+    "react-icons": "^4.3.1",
+    "react-rough-notation": "^1.0.1",
+    "react-typing-effect": "^2.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "18.7.18",
+    "@types/react": "^17.0.37",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.4",
+    "tailwindcss": "^3.0.0",
+    "typescript": "^4.5.4"
+  }
+}
