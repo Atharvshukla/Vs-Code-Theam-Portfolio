@@ -1,218 +1,167 @@
-import Head from 'next/head';
-import File from '../components/File';
-import Sidebar from '../components/Sidebar';
-import { BiCodeAlt } from 'react-icons/bi';
-import { VscClose } from 'react-icons/vsc';
-import Paths from '../components/Paths';
-import OpenEditor from '../components/OpenEditor';
-import Code from '../components/Code';
-import Footer from '../components/Footer';
-import TopNav from '../components/TopNav';
-import ProjectTile from '../components/ProjectTile';
-import ReactTypingEffect from 'react-typing-effect';
-import { RoughNotation, RoughNotationGroup } from 'react-rough-notation';
-import Link from 'next/link';
-import CursorAnimation from '../components/CursorAnimation';
-import dynamic from 'next/dynamic';
-const AnimatedCursor = dynamic(import('react-animated-cursor'), { ssr: false });
+import Head from "next/head";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import AnimatedSection from "../components/AnimatedSection";
 
-export default function about() {
-    return (
-        <div className="flex flex-col h-screen">
-            <div className="flex items-center justify-center mt-10 text-center sm:hidden">
-                <h1>Please Rotate your Screen or view on Desktop</h1>
+const milestones = [
+  {
+    period: "2026 — Present",
+    title: "Founding Engineer",
+    company: "Mentorgain",
+    description:
+      "Building the platform from the ground up — architecture, product, and engineering culture. Taking an idea from zero to one.",
+  },
+  {
+    period: "2022 — 2026",
+    title: "B.Tech Computer Science",
+    company: "VIT, Vellore",
+    description:
+      "Studied Computer Science, explored full-stack development, cloud computing, blockchain, and competitive programming.",
+  },
+];
+
+const skills = [
+  { category: "Frontend", items: ["React", "Next.js", "Tailwind CSS", "TypeScript"] },
+  { category: "Backend", items: ["Node.js", "Express", "PostgreSQL", "Redis"] },
+  { category: "Cloud & DevOps", items: ["AWS", "Docker", "CI/CD", "Vercel"] },
+  { category: "Other", items: ["Solidity", "IPFS", "Python", "Git"] },
+];
+
+export default function About() {
+  return (
+    <>
+      <Head>
+        <title>About — Atharv Shukla</title>
+      </Head>
+
+      <section className="py-16 md:py-24">
+        <div className="max-w-4xl mx-auto px-6">
+          {/* Header */}
+          <AnimatedSection>
+            <p className="text-sm text-accent font-medium tracking-wider uppercase mb-3">
+              About
+            </p>
+            <h1 className="font-display text-4xl md:text-5xl font-semibold text-zinc-100 mb-8">
+              The story so far
+            </h1>
+          </AnimatedSection>
+
+          {/* Bio */}
+          <AnimatedSection delay={0.1}>
+            <div className="prose prose-lg max-w-none mb-20">
+              <p className="text-zinc-300 text-lg leading-relaxed mb-6">
+                I&apos;m Atharv Shukla — a founding engineer at Mentorgain, where
+                I&apos;m building the future of mentorship from the ground up. I
+                care deeply about crafting products that solve real problems, and
+                I believe the best software comes from engineers who understand
+                both the code and the people it serves.
+              </p>
+              <p className="text-zinc-400 leading-relaxed mb-6">
+                My journey started with curiosity — tinkering with code as a
+                student at VIT, building everything from expense trackers to
+                decentralized applications. That curiosity evolved into
+                conviction: I want to be at the earliest stages of building
+                products, where every decision matters and every line of code
+                shapes the future.
+              </p>
+              <p className="text-zinc-400 leading-relaxed">
+                As a founding engineer, I wear many hats — architect, product
+                thinker, DevOps engineer, and sometimes designer. I write about
+                this journey because I believe the founding engineer role is one
+                of the most unique and underexplored in tech.
+              </p>
             </div>
-            <div className="hidden selection:text-gray-400 sm:flex flex-grow">
-                <Sidebar />
-                <div className="bg-[#1f2428] border-r border-gray-600 text-white w-60">
-                    <Paths />
-                </div>
-                <div className="bg-[#24292f] flex-grow flex flex-col text-white">
-                    <div className="flex">
-                        <TopNav />
+          </AnimatedSection>
+
+          {/* Journey */}
+          <AnimatedSection delay={0.2}>
+            <h2 className="font-display text-2xl font-semibold text-zinc-100 mb-8">
+              Journey
+            </h2>
+          </AnimatedSection>
+
+          <div className="space-y-6 mb-20">
+            {milestones.map((milestone, i) => (
+              <AnimatedSection key={milestone.title} delay={0.2 + i * 0.1}>
+                <div className="glass-light rounded-xl p-6 group hover:border-zinc-600 transition-all duration-500">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                    <span className="text-sm text-zinc-500 font-medium whitespace-nowrap pt-0.5 sm:w-36 shrink-0">
+                      {milestone.period}
+                    </span>
+                    <div>
+                      <h3 className="font-display text-lg font-semibold text-zinc-100">
+                        {milestone.title}
+                      </h3>
+                      <p className="text-accent text-sm mb-2">
+                        {milestone.company}
+                      </p>
+                      <p className="text-sm text-zinc-400 leading-relaxed">
+                        {milestone.description}
+                      </p>
                     </div>
-                    <div className="flex-grow border-t flex flex-col border-gray-600">
-                        <div className="bg-conten bg-no-repeat bg-cover flex flex-col p-8 space-y-5 flex-grow text-lg">
-                            <div className="flex items-center ">
-                                <img
-                                    src="https://i.ibb.co/YWQ1pCq/i-Screen-Shoter-20240630051408930.jpg"
-                                    alt="alt"
-                                    className="w-24 h-24 border-2 border-red-500 rounded-full"
-                                />
-                                <div className="flex flex-col ml-4">
-                                    <h1 className="font-bold text-lg">
-                                        Atharv Shukla
-                                    </h1>
-                                    <h1 className="font-light text-green-500">
-                                        <ReactTypingEffect
-                                            text={[
-                                                'Full Stack Developer',
-                                                'AWS Cloud Practitioner',
-                                                'DAPP Developer',
-                                                'Computer Science Student',
-                                                'Competitive Coder',
-                                            ]}
-                                            speed={75}
-                                            eraseDelay={1500}
-                                            eraseSpeed={50}
-                                            typingDelay={800}
-                                        />
-                                    </h1>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-4 pb-6 rounded-xl border-b border-blue-500">
-                                <Link href="/socials">
-                                    <button className="border border-red-500 p-2 w-28 hover:rounded-xl rounded-md hover:scale-105 hover:shadow-xl hover:bg-red-500 transition">
-                                        Contact Me
-                                    </button>
-                                </Link>
-                                <Link href="/projects">
-                                    <button className="border border-red-500 p-2 w-32 hover:rounded-xl rounded-md hover:scale-105 hover:shadow-xl hover:bg-red-500 transition">
-                                        View Projects
-                                    </button>
-                                </Link>
-                            </div>
-                            <h1 className="font-serif text-2xl w-48 shadow-xl text-center p-1 rounded-md">
-                                <RoughNotation
-                                    type="underline"
-                                    show={true}
-                                    color="red"
-                                    iterations={3}
-                                >
-                                    A little About Me
-                                </RoughNotation>
-                            </h1>
-                            <p className="font-mono text-base font-light leading-10">
-                                <p className="text-gray-300">Hey There,</p>I am{' '}
-                                <span className="hover:underline transition">
-                                    <RoughNotation
-                                        type="circle"
-                                        color="orange"
-                                        show={true}
-                                        padding={9}
-                                        animationDelay={400}
-                                    >
-                                        Atharv&nbsp;Shukla
-                                    </RoughNotation>
-                                </span>
-                                , a{' '}
-                                <span className="text-white font-semibold transition hover:p-1 p-1">
-                                    <RoughNotation
-                                        type="highlight"
-                                        color="purple"
-                                        show={true}
-                                        padding="13"
-                                        animationDelay={800}
-                                    >
-                                        Full&nbsp;Stack&nbsp;Developer
-                                    </RoughNotation>
-                                </span>
-                                ,{' '}
-                                <span className="text-white font-semibold transition hover:p-1 p-1">
-                                    <RoughNotation
-                                        type="highlight"
-                                        color="green"
-                                        show={true}
-                                        padding="15"
-                                        animationDelay={1600}
-                                    >
-                                        AWS&nbsp;Cloud&nbsp;Practitioner
-                                    </RoughNotation>
-                                </span>
-                                ,{' '}
-                                <span className="text-white font-semibold transition hover:p-1 p-1">
-                                    <RoughNotation
-                                        type="highlight"
-                                        color="blue"
-                                        show={true}
-                                        padding="16"
-                                        animationDelay={2400}
-                                    >
-                                        Dapp&nbsp;Developer
-                                    </RoughNotation>
-                                </span>
-                                ,{' '}
-                                {/* <span className="text-white font-semibold transition hover:p-1 p-1">
-                                    <RoughNotation
-                                        type="highlight"
-                                        color="red"
-                                        show={true}
-                                        padding="10"
-                                        animationDelay={3200}
-                                    >
-                                        Competitive&nbsp;Coder
-                                    </RoughNotation>
-                                </span>{' '} */}
-                                and {'a '}
-                                <span className="text-white font-semibold transition hover:p-1 p-1">
-                                    <RoughNotation
-                                        type="highlight"
-                                        color="teal"
-                                        show={true}
-                                        padding="10"
-                                        animationDelay={4000}
-                                    >
-                                        Learner
-                                    </RoughNotation>
-                                    !
-                                </span>
-                                <div className="font-mono">
-                                    I am currently a{' '}
-                                    <RoughNotation
-                                        type="box"
-                                        animationDelay={4800}
-                                        show={true}
-                                        color="violet"
-                                        iterations={4}
-                                    >
-                                        B.Tech&nbsp;Computer&nbsp;Science
-                                    </RoughNotation>{' '}
-                                    Undergrad at{' '}
-                                    <RoughNotation
-                                        type="highlight"
-                                        animationDelay={5600}
-                                        show={true}
-                                        color="gray"
-                                    >
-                                        Vellore&nbsp;Institute&nbsp;of&nbsp;Technology
-                                    </RoughNotation>
-                                    , Vellore, India.
-                                </div>{' '}
-                                Catch up with me on{' '}
-                                <a
-                                    href="https://instagram.com/__imatharv"
-                                    className="hover:underline"
-                                >
-                                    <RoughNotation
-                                        type="circle"
-                                        color="pink"
-                                        show={true}
-                                        animationDelay={6400}
-                                        padding={8}
-                                    >
-                                        Instagram
-                                    </RoughNotation>
-                                </a>
-                                <br />
-                                <RoughNotation
-                                    type="box"
-                                    color="#e75480"
-                                    show={true}
-                                    animationDelay={7200}
-                                    padding={5}
-                                >
-                                    Life
-                                </RoughNotation>
-                                &nbsp;
-                                {'->'} 99 little bugs in the code. 99 little
-                                bugs in the code. Take one down, patch it
-                                around. 127 little bugs in the code...👨‍💻 <br />
-                            </p>
-                        </div>
-                    </div>
+                  </div>
                 </div>
+              </AnimatedSection>
+            ))}
+          </div>
+
+          {/* Skills */}
+          <AnimatedSection delay={0.3}>
+            <h2 className="font-display text-2xl font-semibold text-zinc-100 mb-8">
+              Technical Skills
+            </h2>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-20">
+            {skills.map((skillGroup, i) => (
+              <AnimatedSection key={skillGroup.category} delay={0.3 + i * 0.08}>
+                <div className="glass-light rounded-xl p-6">
+                  <h3 className="text-sm text-accent font-medium mb-4">
+                    {skillGroup.category}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {skillGroup.items.map((skill) => (
+                      <span
+                        key={skill}
+                        className="text-sm px-3 py-1.5 rounded-lg bg-zinc-800/60 text-zinc-300 border border-zinc-700/40"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <AnimatedSection delay={0.4}>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <Link
+                href="/blog"
+                className="group flex items-center gap-2 text-zinc-400 hover:text-accent transition-colors cursor-pointer"
+              >
+                Read about my journey
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </Link>
+              <span className="text-zinc-700 hidden sm:inline">|</span>
+              <Link
+                href="/contact"
+                className="group flex items-center gap-2 text-zinc-400 hover:text-accent transition-colors cursor-pointer"
+              >
+                Get in touch
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </Link>
             </div>
-            <Footer />
+          </AnimatedSection>
         </div>
-    );
+      </section>
+    </>
+  );
 }
