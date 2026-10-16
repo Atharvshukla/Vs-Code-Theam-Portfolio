@@ -9,6 +9,9 @@ const navLinks = [
   { href: "/about", label: "About" },
   { href: "/projects", label: "Projects" },
   { href: "/blog", label: "Blog" },
+  { href: "/compliance", label: "SOC2 & GDPR" },
+  { href: "/integrations", label: "Integrations" },
+  { href: "/incidents", label: "Case Studies" },
   { href: "/contact", label: "Contact" },
 ];
 

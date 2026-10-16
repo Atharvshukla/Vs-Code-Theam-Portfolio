@@ -22,9 +22,12 @@ const milestones = [
 
 const skills = [
   { category: "Frontend", items: ["React", "Next.js", "Tailwind CSS", "TypeScript"] },
-  { category: "Backend", items: ["Node.js", "Express", "PostgreSQL", "Redis"] },
-  { category: "Cloud & DevOps", items: ["AWS", "Docker", "CI/CD", "Vercel"] },
-  { category: "Other", items: ["Solidity", "IPFS", "Python", "Git"] },
+
+  { category: "Backend", items: ["Node.js", "NestJS", "Express", "PostgreSQL", "Redis"] },
+  { category: "AI & Data", items: ["Machine Learning", "RAG", "PgVector", "Python", "LLMs"] },
+  { category: "Full Stack", items: ["MERN Stack", "Next.js", "TypeScript", "REST APIs"] },
+  { category: "Cloud & DevOps", items: ["AWS", "Docker", "CI/CD", "Vercel", "New Relic"] },
+  { category: "Other", items: ["Solidity", "IPFS", "Git"] },
 ];
 
 export default function About() {
@@ -120,14 +123,21 @@ export default function About() {
                     {skillGroup.category}
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {skillGroup.items.map((skill) => (
-                      <span
-                        key={skill}
-                        className="text-sm px-3 py-1.5 rounded-lg bg-zinc-800/60 text-zinc-300 border border-zinc-700/40"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                    {skillGroup.items.map((skill) => {
+                      const highlighted = ["NestJS", "React"].includes(skill);
+                      return (
+                        <span
+                          key={skill}
+                          className={`text-sm px-3 py-1.5 rounded-lg border ${
+                            highlighted
+                              ? "bg-accent/15 text-accent border-accent/30 font-medium"
+                              : "bg-zinc-800/60 text-zinc-300 border-zinc-700/40"
+                          }`}
+                        >
+                          {skill}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               </AnimatedSection>
