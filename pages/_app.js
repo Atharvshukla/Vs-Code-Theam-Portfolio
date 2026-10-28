@@ -26,9 +26,9 @@ function MyApp({ Component, pageProps }) {
           property="og:description"
           content="Founding engineer. Relay, Upmarket and Vouch: three products built and shipped end to end."
         />
-        <link rel="icon" href="/favicon.ico" sizes="48x48" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="48x48" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png?v=2" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <style jsx global>{`
