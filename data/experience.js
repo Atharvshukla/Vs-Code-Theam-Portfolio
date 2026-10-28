@@ -11,7 +11,7 @@ export const experience = [
       "A multi-tenant B2B SaaS platform enterprises use to run mentoring programmes end to end: matching, calendar-synced sessions, goals and skill growth, and outcome reporting for HR.",
     points: [
       "Own the platform end to end — backend, mentor and mentee web app, admin consoles, data model, delivery, code review and production support.",
-      "Own production and cloud: all AWS infrastructure (RDS, S3, SES, SNS, IAM), deployments, staging, and an account-wide security remediation plan. Authored Atlas migrations across 40+ tables on a live database.",
+      "Own production and cloud: all AWS infrastructure (RDS, S3, SES, SNS, IAM), deployments, staging, and an account-wide security remediation plan.",
       "Led SOC 2 and GDPR as the technical lead: PostgreSQL Row-Level Security on every multi-tenant table, CASL role-based access control, privacy controls and audit tooling.",
       "Built the core product: matching on Elasticsearch, session booking with calendar sync, goals and tasks, analytics, multi-program support, badges and community feed.",
       "Built the notification and integration layer: self-hosted Novu behind an orchestrator serving ~200 call sites over email, SMS, Slack and Teams; Microsoft Entra ID SSO and Graph; Rippling HRIS sync; New Relic APM.",
