@@ -1,85 +1,85 @@
 import Link from "next/link";
-import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { GitBranch, Github, Linkedin, Mail, Code2 } from "lucide-react";
+import { navLinks, site } from "./site";
+
+const commit = (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || "").slice(0, 7) || "local";
+const branch = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF || "main";
 
 const socials = [
-  {
-    icon: Github,
-    href: "https://github.com/atharvshukla",
-    label: "GitHub",
-  },
-  {
-    icon: Linkedin,
-    href: "https://linkedin.com/in/atharvshukla",
-    label: "LinkedIn",
-  },
-  {
-    icon: Twitter,
-    href: "https://twitter.com/atharvshukla",
-    label: "Twitter",
-  },
-  {
-    icon: Mail,
-    href: "mailto:atharvshukla.dev@gmail.com",
-    label: "Email",
-  },
+  { href: site.github, label: "GitHub", icon: Github },
+  { href: site.linkedin, label: "LinkedIn", icon: Linkedin },
+  { href: site.leetcode, label: "LeetCode", icon: Code2 },
+  { href: `mailto:${site.email}`, label: "Email", icon: Mail },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-zinc-800/50 mt-32">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <Link
-              href="/"
-              className="font-display text-lg font-semibold text-zinc-100 hover:text-accent transition-colors cursor-pointer"
-            >
-              Atharv Shukla
-            </Link>
-            <p className="text-sm text-zinc-500">
-              Founding Engineer at Mentorgain
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {socials.map((social) => (
+    <footer className="relative mt-24 border-t border-ink-700">
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div>
+          <p className="font-mono text-sm text-fg">atharv shukla</p>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-fg-dim">
+            Founding engineer. I take products from an empty repository to production and stay
+            on call for them afterwards.
+          </p>
+          <div className="mt-5 flex gap-2">
+            {socials.map(({ href, label, icon: Icon }) => (
               <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
+                key={label}
+                href={href}
+                target={href.startsWith("mailto") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                className="text-zinc-500 hover:text-accent transition-colors duration-300 cursor-pointer p-2"
-                aria-label={social.label}
+                aria-label={label}
+                className="grid h-9 w-9 place-items-center rounded-md border border-ink-700 text-fg-dim transition-colors hover:border-ink-500 hover:text-fg"
               >
-                <social.icon size={20} />
+                <Icon size={15} />
               </a>
             ))}
           </div>
         </div>
+        <div>
+          <p className="label mb-4">navigate</p>
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 font-mono text-[13px]">
+            {navLinks.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="text-fg-dim transition-colors hover:text-fg">
+                  ./{l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p className="label mb-4">elsewhere</p>
+          <ul className="space-y-2 font-mono text-[13px]">
+            <li>
+              <a href={site.resume} className="text-fg-dim transition-colors hover:text-fg">
+                resume.pdf ↗
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${site.email}`} className="break-all text-fg-dim transition-colors hover:text-fg">
+                {site.email}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-        <div className="mt-8 pt-8 border-t border-zinc-800/30 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-zinc-600">
-            &copy; {new Date().getFullYear()} Atharv Shukla. Built with intention.
-          </p>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/projects"
-              className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer"
-            >
-              Projects
-            </Link>
-            <Link
-              href="/blog"
-              className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer"
-            >
-              Blog
-            </Link>
-            <Link
-              href="/contact"
-              className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer"
-            >
-              Contact
-            </Link>
+      {/* Editor-style status bar */}
+      <div className="border-t border-ink-700 bg-ink-900/80">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-5 py-2 font-mono text-[11px] text-fg-dim sm:px-6">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5">
+              <GitBranch size={11} /> {branch}@{commit}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" /> build passing
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span>Next.js · Tailwind · Framer Motion</span>
+            <span>© {new Date().getFullYear()}</span>
           </div>
         </div>
       </div>

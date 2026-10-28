@@ -1,129 +1,137 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Command, Menu, X } from "lucide-react";
+import { navLinks } from "./site";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/projects", label: "Projects" },
-  { href: "/blog", label: "Blog" },
-  { href: "/compliance", label: "SOC2 & GDPR" },
-  { href: "/integrations", label: "Integrations" },
-  { href: "/incidents", label: "Case Studies" },
-  { href: "/contact", label: "Contact" },
-];
+function isActive(pathname, href) {
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
-export default function Navbar() {
+export default function Navbar({ onOpenPalette }) {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [router.pathname]);
+  useEffect(() => setMobileOpen(false), [router.asPath]);
+
+  // Render the current route as a shell path: ~/projects/relay
+  const path = router.asPath.split(/[?#]/)[0].replace(/\/$/, "");
 
   return (
-    <motion.header
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "glass py-3"
-          : "bg-transparent py-5"
+    <header
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${
+        scrolled || mobileOpen
+          ? "border-ink-700 bg-ink-950/85 backdrop-blur-xl"
+          : "border-transparent bg-transparent"
       }`}
     >
-      <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        <Link href="/" className="cursor-pointer group">
-          <span className="font-display text-xl font-semibold tracking-tight text-zinc-100 group-hover:text-accent transition-colors duration-300">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5 sm:px-6">
+        <Link href="/" className="group flex min-w-0 items-center gap-2.5 font-mono text-sm">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md border border-ink-600 bg-ink-850 text-[11px] font-semibold text-fg transition-colors group-hover:border-accent/60 group-hover:text-accent">
             AS
+          </span>
+          <span className="truncate text-fg-dim">
+            <span className="text-fg">atharv</span>
+            <span className="text-fg-faint">@</span>
+            <span className="text-fg-muted">dev</span>
+            <span className="text-fg-faint">:</span>
+            <span className="text-accent">~{path}</span>
+            <span className="ml-0.5 inline-block h-3.5 w-[7px] translate-y-[2px] animate-blink bg-accent/80" />
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden items-center gap-0.5 lg:flex">
           {navLinks.map((link) => {
-            const isActive =
-              link.href === "/"
-                ? router.pathname === "/"
-                : router.pathname.startsWith(link.href);
-
+            const active = isActive(router.pathname, link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 cursor-pointer rounded-lg ${
-                  isActive
-                    ? "text-accent"
-                    : "text-zinc-400 hover:text-zinc-100"
+                className={`relative rounded-md px-3 py-1.5 font-mono text-[13px] transition-colors ${
+                  active ? "text-fg" : "text-fg-dim hover:text-fg"
                 }`}
               >
-                {link.label}
-                {isActive && (
-                  <motion.div
-                    layoutId="navbar-active"
-                    className="absolute inset-0 bg-accent/10 rounded-lg"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                {active && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute inset-0 rounded-md border border-ink-600 bg-ink-800"
+                    transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                   />
                 )}
+                <span className="relative">{link.label}</span>
               </Link>
             );
           })}
+          <button
+            onClick={onOpenPalette}
+            className="ml-3 flex items-center gap-1.5 rounded-md border border-ink-600 bg-ink-850 px-2.5 py-1.5 font-mono text-xs text-fg-dim transition-colors hover:border-ink-500 hover:text-fg"
+            aria-label="Open command palette"
+          >
+            <Command size={12} />K
+          </button>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-zinc-400 hover:text-zinc-100 transition-colors cursor-pointer p-2"
-          aria-label="Toggle navigation menu"
-        >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <button
+            onClick={onOpenPalette}
+            className="rounded-md border border-ink-600 bg-ink-850 p-2 text-fg-dim"
+            aria-label="Open command palette"
+          >
+            <Command size={14} />
+          </button>
+          <button
+            onClick={() => setMobileOpen((o) => !o)}
+            className="rounded-md border border-ink-600 bg-ink-850 p-2 text-fg-dim"
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X size={14} /> : <Menu size={14} />}
+          </button>
+        </div>
       </nav>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden glass border-t border-zinc-800/50"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden border-t border-ink-700 lg:hidden"
           >
-            <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-1">
-              {navLinks.map((link) => {
-                const isActive =
-                  link.href === "/"
-                    ? router.pathname === "/"
-                    : router.pathname.startsWith(link.href);
-
-                return (
+            <div className="mx-auto grid max-w-6xl gap-0.5 px-5 py-3">
+              {navLinks.map((link, i) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                >
                   <Link
-                    key={link.href}
                     href={link.href}
-                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer ${
-                      isActive
-                        ? "text-accent bg-accent/10"
-                        : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50"
+                    className={`flex items-center gap-3 rounded-md px-3 py-2.5 font-mono text-sm ${
+                      isActive(router.pathname, link.href)
+                        ? "bg-ink-800 text-fg"
+                        : "text-fg-dim hover:bg-ink-850 hover:text-fg"
                     }`}
                   >
-                    {link.label}
+                    <span className="text-fg-faint">cd</span> ~{link.href}
                   </Link>
-                );
-              })}
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

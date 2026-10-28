@@ -1,128 +1,105 @@
 import Head from "next/head";
-import { Github, Linkedin, Mail, Twitter, MapPin, ArrowUpRight } from "lucide-react";
-import AnimatedSection from "../components/AnimatedSection";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, Check, Code2, Copy, FileText, Github, Linkedin, Mail } from "lucide-react";
+import { Container, PageHeader, Stagger, StaggerItem, Window } from "../components/ui";
+import { site } from "../components/site";
 
-const socials = [
-  {
-    icon: Github,
-    name: "GitHub",
-    handle: "@atharvshukla",
-    href: "https://github.com/atharvshukla",
-    description: "Code & open source",
-  },
-  {
-    icon: Linkedin,
-    name: "LinkedIn",
-    handle: "Atharv Shukla",
-    href: "https://linkedin.com/in/atharvshukla",
-    description: "Professional network",
-  },
-  {
-    icon: Twitter,
-    name: "Twitter",
-    handle: "@atharvshukla",
-    href: "https://twitter.com/atharvshukla",
-    description: "Thoughts & threads",
-  },
-  {
-    icon: Mail,
-    name: "Email",
-    handle: "atharvshukla.dev@gmail.com",
-    href: "mailto:atharvshukla.dev@gmail.com",
-    description: "Direct line",
-  },
+const channels = [
+  { label: "Email", value: site.email, href: `mailto:${site.email}`, icon: Mail, note: "fastest way to reach me" },
+  { label: "LinkedIn", value: "in/iamatharv", href: site.linkedin, icon: Linkedin, note: "for intros and roles" },
+  { label: "GitHub", value: "@Atharvshukla", href: site.github, icon: Github, note: "code and experiments" },
+  { label: "LeetCode", value: "u/imatharv", href: site.leetcode, icon: Code2, note: "problem solving" },
+  { label: "Resume", value: "Atharv_Shukla_Resume.pdf", href: site.resume, icon: FileText, note: "one page, PDF" },
 ];
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(site.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${site.email}`;
+    }
+  };
+
   return (
     <>
       <Head>
         <title>Contact — Atharv Shukla</title>
       </Head>
 
-      <section className="py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-6">
-          {/* Header */}
-          <AnimatedSection>
-            <p className="text-sm text-accent font-medium tracking-wider uppercase mb-3">
-              Contact
-            </p>
-            <h1 className="font-display text-4xl md:text-5xl font-semibold text-zinc-100 mb-4">
-              Let&apos;s connect
-            </h1>
-            <p className="text-lg text-zinc-400 max-w-xl leading-relaxed mb-4">
-              I&apos;m always open to interesting conversations, collaborations,
-              or just a friendly hello.
-            </p>
-            <div className="flex items-center gap-2 text-sm text-zinc-500 mb-16">
-              <MapPin size={14} />
-              <span>India</span>
-            </div>
-          </AnimatedSection>
+      <PageHeader
+        path="contact"
+        title="Let's build something that ships."
+        description="Founding roles, hard backend problems, enterprise integrations or a second pair of eyes on an architecture — I'm happy to talk."
+      />
 
-          {/* Social cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-20">
-            {socials.map((social, i) => (
-              <AnimatedSection key={social.name} delay={i * 0.08}>
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group glass-light rounded-xl p-6 flex items-start gap-4 hover:border-zinc-600 transition-all duration-500 cursor-pointer block"
+      <Container className="grid gap-10 pb-10 lg:grid-cols-[1fr_1.1fr]">
+        <Window title="~/contact.sh" bodyClassName="p-6 font-mono text-[13px] leading-[1.9]">
+          <p className="text-fg-dim"># copy my address, or open your mail client</p>
+          <p>
+            <span className="text-accent">export</span> <span className="text-sky-300/90">EMAIL</span>
+            <span className="text-fg-dim">=</span>
+            <span className="break-all text-amber-200/90">&quot;{site.email}&quot;</span>
+          </p>
+          <p className="mt-3">
+            <span className="text-accent">$</span> <span className="text-fg">mail -s &quot;Hi Atharv&quot; $EMAIL</span>
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3 font-sans">
+            <button
+              onClick={copy}
+              className="relative inline-flex items-center gap-2 overflow-hidden rounded-lg border border-ink-600 bg-ink-850 px-4 py-2.5 text-sm font-medium text-fg transition-colors hover:border-ink-500"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={copied ? "done" : "copy"}
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -10, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="inline-flex items-center gap-2"
                 >
-                  <div className="p-3 rounded-lg bg-zinc-800/60 border border-zinc-700/40 group-hover:bg-accent/10 group-hover:border-accent/30 transition-all duration-300">
-                    <social.icon
-                      size={22}
-                      className="text-zinc-400 group-hover:text-accent transition-colors"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-medium text-zinc-100 group-hover:text-accent transition-colors">
-                        {social.name}
-                      </h3>
-                      <ArrowUpRight
-                        size={16}
-                        className="text-zinc-600 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
-                      />
-                    </div>
-                    <p className="text-sm text-zinc-400 truncate">
-                      {social.handle}
-                    </p>
-                    <p className="text-xs text-zinc-600 mt-1">
-                      {social.description}
-                    </p>
-                  </div>
-                </a>
-              </AnimatedSection>
-            ))}
+                  {copied ? <Check size={15} className="text-accent" /> : <Copy size={15} />}
+                  {copied ? "Copied" : "Copy email"}
+                </motion.span>
+              </AnimatePresence>
+            </button>
+            <a
+              href={`mailto:${site.email}`}
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-ink-950 transition-colors hover:bg-accent-hover"
+            >
+              <Mail size={15} /> Open mail
+            </a>
           </div>
+        </Window>
 
-          {/* Direct email CTA */}
-          <AnimatedSection delay={0.4}>
-            <div className="glass rounded-2xl p-10 md:p-14 text-center relative overflow-hidden">
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-24 bg-violet-600/10 rounded-full blur-[60px]" />
-              </div>
-              <div className="relative z-10">
-                <h2 className="font-display text-2xl md:text-3xl font-semibold text-zinc-100 mb-3">
-                  Prefer email?
-                </h2>
-                <p className="text-zinc-400 mb-6 max-w-md mx-auto">
-                  Drop me a line and I&apos;ll get back to you as soon as I can.
-                </p>
-                <a
-                  href="mailto:atharvshukla.dev@gmail.com"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-zinc-950 font-medium rounded-lg transition-all duration-300 cursor-pointer"
-                >
-                  <Mail size={18} />
-                  atharvshukla.dev@gmail.com
-                </a>
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
+        <Stagger as="ul" className="divide-y divide-ink-700 overflow-hidden rounded-xl border border-ink-700">
+          {channels.map(({ label, value, href, icon: Icon, note }) => (
+            <StaggerItem as="li" key={label}>
+              <a
+                href={href}
+                target={href.startsWith("mailto") ? undefined : "_blank"}
+                rel="noopener noreferrer"
+                className="group flex items-center gap-4 bg-ink-900 px-5 py-4 transition-colors hover:bg-ink-850"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-ink-700 text-fg-dim transition-colors group-hover:text-accent">
+                  <Icon size={17} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-medium text-fg">{label}</span>
+                  <span className="block truncate font-mono text-[12px] text-fg-dim">{value}</span>
+                </span>
+                <span className="hidden text-[12px] text-fg-faint sm:block">{note}</span>
+                <ArrowUpRight size={15} className="shrink-0 text-fg-faint transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg" />
+              </a>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </Container>
     </>
   );
 }

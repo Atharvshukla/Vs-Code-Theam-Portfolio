@@ -1,699 +1,344 @@
-import { motion } from "framer-motion";
-import Link from "next/link";
 import Head from "next/head";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Sparkles,
-  Shield,
-  Lock,
-  Globe,
-  Terminal,
-  AlertTriangle,
-  Cable,
-  Plug,
-  Zap,
-  CheckCircle2,
-} from "lucide-react";
-import AnimatedSection from "../components/AnimatedSection";
-import projects from "../data/projects";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight, ArrowUpRight, FileText, Command } from "lucide-react";
+import { flagship } from "../data/projects";
+import { experience, skills } from "../data/experience";
 import blogPosts from "../data/blog";
-import { complianceStats } from "../data/compliance";
-import { incidents, incidentStats } from "../data/incidents";
 import integrations from "../data/integrations";
+import { incidents } from "../data/incidents";
+import { Button, Container, Reveal, SectionHeader, Stagger, StaggerItem, StatusDot, Window, ease } from "../components/ui";
+import Terminal from "../components/Terminal";
+import GitLog from "../components/GitLog";
+import { site } from "../components/site";
 
-function HeroSection() {
+const MARQUEE = [
+  "TypeScript", "NestJS", "React", "PostgreSQL", "pgvector", "LangGraph", "MCP", "AWS", "Docker",
+  "SAML 2.0", "OIDC", "SCIM 2.0", "Row-Level Security", "SOC 2", "GDPR", "n8n", "Tailwind", "Framer Motion",
+];
+
+const PRINCIPLES = [
+  ["Own the outcome, not the ticket.", "Shipping is the start. I stay on call for what I build and fix the class of bug, not the instance."],
+  ["Boring technology, sharp edges removed.", "Postgres before a new database. One deploy path. Fewer moving parts that each do one thing well."],
+  ["Security is a product feature.", "RLS, audit trails and least privilege go in on day one, because enterprise deals depend on them."],
+  ["Write it down.", "ADRs, runbooks and postmortems turn one person's context into the team's."],
+];
+
+function Hero() {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background gradient orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-violet-600/8 rounded-full blur-[160px] animate-glow" />
-        <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-fuchsia-600/6 rounded-full blur-[128px] animate-glow" />
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-          {/* Left — Photo */}
+    <section className="relative">
+      <Container className="grid items-center gap-14 pb-20 pt-14 md:pt-24 lg:grid-cols-[1.1fr_1fr]">
+        <div>
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, ease: [0.25, 0.4, 0.25, 1] }}
-            className="relative w-full max-w-sm lg:max-w-md shrink-0"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease }}
+            className="mb-8 inline-flex items-center gap-3 rounded-full border border-ink-700 bg-ink-900/80 py-1.5 pl-3 pr-4"
           >
-            {/* Glow behind photo */}
-            <div className="absolute -inset-8 bg-gradient-to-br from-violet-500/15 via-fuchsia-500/10 to-transparent rounded-full blur-[80px] animate-glow" />
-
-            {/* Photo container */}
-            <div className="relative">
-              {/* Decorative border ring */}
-              <div className="absolute -inset-3 rounded-2xl border border-violet-500/10 rotate-2" />
-              <div className="absolute -inset-3 rounded-2xl border border-fuchsia-500/10 -rotate-1" />
-
-              {/* Image */}
-              <div className="relative rounded-2xl overflow-hidden">
-                {/* Edge fades to blend white bg into dark theme */}
-                <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#09090b] via-transparent to-[#09090b]/60" />
-                <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#09090b]/50 via-transparent to-[#09090b]/50" />
-
-                <img
-                  src="/atharv.jpg"
-                  alt="Atharv Shukla"
-                  className="w-full h-auto relative z-0 brightness-75 contrast-125"
-                />
-
-                {/* Key light — warm top-left */}
-                <div className="absolute -top-16 -left-16 z-[9] w-96 h-96 bg-amber-300/12 rounded-full blur-[120px]" />
-                {/* Warm fill — center face area */}
-                <div className="absolute top-[15%] left-[20%] z-[9] w-72 h-64 bg-orange-200/10 rounded-full blur-[80px]" />
-                {/* Rim light — warm right edge */}
-                <div className="absolute top-[10%] -right-8 z-[9] w-48 h-[70%] bg-amber-400/12 rounded-full blur-[70px] rotate-6" />
-                {/* Hair light — warm top glow */}
-                <div className="absolute -top-10 left-1/3 z-[9] w-64 h-40 bg-orange-300/8 rounded-full blur-[60px]" />
-                {/* Accent kicker — violet from bottom-right for depth */}
-                <div className="absolute bottom-[20%] right-[10%] z-[9] w-56 h-56 bg-violet-400/8 rounded-full blur-[80px]" />
-
-                {/* Warm color wash over image */}
-                <div className="absolute inset-0 z-[8] bg-gradient-to-br from-amber-900/15 via-orange-900/5 to-violet-900/10 mix-blend-color" />
-              </div>
-            </div>
+            <StatusDot label="" />
+            <span className="font-mono text-[12px] text-fg-muted">
+              founding engineer <span className="text-fg-faint">@</span> mentorgain
+            </span>
           </motion.div>
 
-          {/* Right — Text content */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.4, 0.25, 1] }}
-            className="flex-1 text-center lg:text-left"
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.05, ease }}
+            className="text-balance text-[2.6rem] font-semibold leading-[1.05] tracking-tight text-fg sm:text-6xl lg:text-[4.2rem]"
           >
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full border border-zinc-800 bg-zinc-900/50 text-sm text-zinc-400"
-            >
-              <Sparkles size={14} className="text-accent" />
-              <span>Founding Engineer at Mentorgain</span>
-            </motion.div>
-
-            {/* Main heading */}
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.1] mb-6">
-              <span className="text-zinc-100">Building </span>
-              <span className="gradient-text italic">products</span>
-              <br />
-              <span className="text-zinc-100">that </span>
-              <span className="gradient-text-warm italic">matter</span>
-            </h1>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="max-w-lg text-lg text-zinc-400 leading-relaxed mb-8 mx-auto lg:mx-0"
-            >
-              I&apos;m Atharv Shukla — a founding engineer crafting the future
-              of mentorship at Mentorgain. I write about building from zero to
-              one, and everything I learn along the way.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.65, duration: 0.6 }}
-              className="flex flex-col sm:flex-row items-center lg:items-start gap-4"
-            >
-              <Link
-                href="/projects"
-                className="group flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-zinc-950 font-medium rounded-lg transition-all duration-300 cursor-pointer"
-              >
-                View Projects
-                <ArrowRight
-                  size={16}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
-              </Link>
-              <Link
-                href="/blog"
-                className="group flex items-center gap-2 px-6 py-3 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-medium rounded-lg transition-all duration-300 cursor-pointer"
-              >
-                Read the Blog
-                <ArrowUpRight
-                  size={16}
-                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                />
-              </Link>
-            </motion.div>
-
-            {/* Quick stats */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
-              className="flex items-center gap-8 mt-10 pt-8 border-t border-zinc-800/50 justify-center lg:justify-start"
-            >
-              <div>
-                <p className="text-2xl font-display font-semibold text-zinc-100">0→1</p>
-                <p className="text-xs text-zinc-500 mt-1">Building Phase</p>
-              </div>
-              <div className="w-px h-8 bg-zinc-800" />
-              <div>
-                <p className="text-2xl font-display font-semibold text-zinc-100">5+</p>
-                <p className="text-xs text-zinc-500 mt-1">Projects Shipped</p>
-              </div>
-              <div className="w-px h-8 bg-zinc-800" />
-              <div>
-                <p className="text-2xl font-display font-semibold text-zinc-100">∞</p>
-                <p className="text-xs text-zinc-500 mt-1">Cups of Chai</p>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="absolute -bottom-16 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className="w-5 h-8 rounded-full border-2 border-zinc-700 flex justify-center pt-1.5"
-          >
-            <div className="w-1 h-2 rounded-full bg-zinc-500" />
-          </motion.div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function FeaturedProjects() {
-  const featured = projects.filter((p) => p.featured).slice(0, 3);
-
-  return (
-    <section className="py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <AnimatedSection>
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <p className="text-sm text-accent font-medium tracking-wider uppercase mb-2">
-                Selected Work
-              </p>
-              <h2 className="font-display text-3xl md:text-4xl font-semibold text-zinc-100">
-                Featured Projects
-              </h2>
-            </div>
-            <Link
-              href="/projects"
-              className="hidden sm:flex items-center gap-1 text-sm text-zinc-400 hover:text-accent transition-colors cursor-pointer"
-            >
-              View all
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </AnimatedSection>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featured.map((project, i) => (
-            <AnimatedSection key={project.title} delay={i * 0.1}>
-              <div className="group relative glass-light rounded-xl overflow-hidden hover:border-zinc-600 transition-all duration-500 cursor-pointer h-full flex flex-col">
-                {/* Image placeholder */}
-                <div className="aspect-video bg-gradient-to-br from-zinc-800 to-zinc-900 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-4xl font-display font-semibold text-zinc-700 group-hover:text-zinc-600 transition-colors">
-                      {project.title.charAt(0)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="font-display text-lg font-semibold text-zinc-100 mb-2 group-hover:text-accent transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-zinc-400 leading-relaxed line-clamp-2 mb-4 flex-1">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-400 border border-zinc-700/50"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </AnimatedSection>
-          ))}
-        </div>
-
-        <AnimatedSection delay={0.3}>
-          <div className="mt-8 sm:hidden text-center">
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-1 text-sm text-zinc-400 hover:text-accent transition-colors cursor-pointer"
-            >
-              View all projects
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </AnimatedSection>
-      </div>
-    </section>
-  );
-}
-
-function IntegrationsPreview() {
-  const latest = integrations[0];
-  if (!latest) return null;
-
-  return (
-    <section className="py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <AnimatedSection>
-          <Link href="/integrations" className="block cursor-pointer group">
-            <div className="rounded-2xl p-8 md:p-12 relative overflow-hidden border border-zinc-800/50 bg-[#0c0c0e] hover:border-accent/30 transition-all duration-500">
-              {/* Connection nodes background */}
-              <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-8 right-12 w-48 h-48 opacity-20 hidden md:block">
-                  <svg viewBox="0 0 200 200" fill="none">
-                    <circle cx="30" cy="30" r="4" fill="#a78bfa" opacity="0.6">
-                      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite" />
-                    </circle>
-                    <circle cx="100" cy="50" r="3" fill="#c084fc" opacity="0.4">
-                      <animate attributeName="opacity" values="0.2;0.7;0.2" dur="4s" repeatCount="indefinite" />
-                    </circle>
-                    <circle cx="170" cy="30" r="4" fill="#a78bfa" opacity="0.5">
-                      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.5s" repeatCount="indefinite" />
-                    </circle>
-                    <circle cx="60" cy="120" r="3" fill="#c084fc" opacity="0.3">
-                      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3.5s" repeatCount="indefinite" />
-                    </circle>
-                    <line x1="32" y1="32" x2="98" y2="48" stroke="#a78bfa" strokeWidth="0.8" opacity="0.15" />
-                    <line x1="102" y1="52" x2="168" y2="32" stroke="#a78bfa" strokeWidth="0.8" opacity="0.15" />
-                    <line x1="100" y1="52" x2="62" y2="118" stroke="#c084fc" strokeWidth="0.8" opacity="0.1" />
-                  </svg>
-                </div>
-                <div className="absolute bottom-0 left-0 w-64 h-32 bg-accent/3 rounded-full blur-[80px]" />
-              </div>
-
-              <div className="relative z-10">
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 rounded-lg bg-accent/10 border border-accent/20 relative">
-                        <Cable size={18} className="text-accent" />
-                      </div>
-                      <p className="text-sm text-accent font-medium tracking-wider uppercase">
-                        Integration Stories
-                      </p>
-                    </div>
-
-                    <h2 className="font-display text-2xl md:text-3xl font-semibold text-zinc-100 mb-3 group-hover:text-accent transition-colors">
-                      Enterprise Integrations
-                    </h2>
-                    <p className="text-zinc-400 leading-relaxed max-w-xl mb-5">
-                      Practical guides to building enterprise integrations for
-                      B2B SaaS — authentication, multi-tenancy, and the
-                      hard-won lessons.
-                    </p>
-
-                    {/* Latest integration card */}
-                    <div className="flex items-start gap-4 p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/50">
-                      <div className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700/50 flex items-center justify-center shrink-0">
-                        <Plug size={18} className="text-zinc-400" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-mono text-accent">
-                            {latest.platform}
-                          </span>
-                          <CheckCircle2
-                            size={12}
-                            className="text-emerald-400"
-                          />
-                        </div>
-                        <p className="text-sm text-zinc-300 font-medium truncate">
-                          {latest.title}
-                        </p>
-                        <p className="text-xs text-zinc-500 mt-0.5">
-                          {latest.readTime}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Visual connector */}
-                  <div className="hidden lg:flex flex-col items-center justify-center gap-3 shrink-0 py-4">
-                    <div className="w-12 h-12 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center">
-                      <span className="text-[10px] font-mono font-bold text-zinc-400">
-                        SaaS
-                      </span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <div className="w-px h-4 bg-gradient-to-b from-zinc-700 to-accent/50" />
-                      <Zap size={14} className="text-accent" />
-                      <div className="w-px h-4 bg-gradient-to-b from-accent/50 to-zinc-700" />
-                    </div>
-                    <div className="w-12 h-12 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center">
-                      <Plug size={18} className="text-zinc-400" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1 mt-6 text-sm text-zinc-500 group-hover:text-accent transition-colors">
-                  Explore integrations
-                  <ArrowRight
-                    size={14}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </AnimatedSection>
-      </div>
-    </section>
-  );
-}
-
-function CompliancePreview() {
-  return (
-    <section className="py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <AnimatedSection>
-          <Link href="/compliance" className="block cursor-pointer group">
-            <div className="glass rounded-2xl p-8 md:p-12 relative overflow-hidden hover:border-zinc-600 transition-all duration-500">
-              {/* Background accents */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-80 h-80 bg-violet-600/5 rounded-full blur-[100px]" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-600/5 rounded-full blur-[80px]" />
-              </div>
-
-              <div className="relative z-10">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                  {/* Left content */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 rounded-lg bg-accent/10 border border-accent/20">
-                        <Shield size={18} className="text-accent" />
-                      </div>
-                      <p className="text-sm text-accent font-medium tracking-wider uppercase">
-                        Compliance Chronicle
-                      </p>
-                    </div>
-
-                    <h2 className="font-display text-2xl md:text-3xl font-semibold text-zinc-100 mb-3 group-hover:text-accent transition-colors">
-                      SOC2 & GDPR Compliance Guide
-                    </h2>
-                    <p className="text-zinc-400 leading-relaxed max-w-xl mb-6">
-                      A practical engineering guide to SOC2 Type II and GDPR
-                      compliance for B2B SaaS — from first audit to
-                      certification. Every decision documented.
-                    </p>
-
-                    {/* Mini badges */}
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Lock size={14} className="text-violet-400" />
-                        <span className="text-zinc-300">SOC2 Type II</span>
-                      </div>
-                      <div className="w-1 h-1 rounded-full bg-zinc-700" />
-                      <div className="flex items-center gap-2 text-sm">
-                        <Globe size={14} className="text-emerald-400" />
-                        <span className="text-zinc-300">GDPR</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right stats */}
-                  <div className="grid grid-cols-2 gap-3 lg:w-64 shrink-0">
-                    {complianceStats.map((stat) => (
-                      <div
-                        key={stat.label}
-                        className="glass-light rounded-lg p-3 text-center"
-                      >
-                        <p className="text-xl font-display font-bold text-zinc-100">
-                          {stat.value}
-                        </p>
-                        <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">
-                          {stat.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Read more arrow */}
-                <div className="flex items-center gap-1 mt-6 text-sm text-zinc-500 group-hover:text-accent transition-colors">
-                  Read the full chronicle
-                  <ArrowRight
-                    size={14}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </AnimatedSection>
-      </div>
-    </section>
-  );
-}
-
-function IncidentsPreview() {
-  const latest = incidents.slice(0, 3);
-
-  return (
-    <section className="py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <AnimatedSection>
-          <Link href="/incidents" className="block cursor-pointer group">
-            <div className="rounded-2xl p-8 md:p-12 relative overflow-hidden border border-zinc-800/50 bg-[#0c0c0e] hover:border-zinc-700 transition-all duration-500">
-              {/* Scanline effect */}
-              <div
-                className="absolute inset-0 pointer-events-none opacity-[0.03]"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)",
-                }}
+            I take products from an empty repo to{" "}
+            <span className="relative whitespace-nowrap">
+              <span className="relative z-10 text-accent">production</span>
+              <motion.span
+                aria-hidden
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.8, delay: 0.7, ease }}
+                className="absolute inset-x-0 bottom-1 -z-0 h-3 origin-left bg-accent/15"
               />
-              {/* Glow accents */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/5 rounded-full blur-[100px]" />
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-red-600/5 rounded-full blur-[80px]" />
-              </div>
+            </span>
+            .
+          </motion.h1>
 
-              <div className="relative z-10">
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
-                  {/* Left content */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                        <Terminal size={18} className="text-emerald-400" />
-                      </div>
-                      <p className="text-sm text-emerald-400 font-mono font-semibold tracking-wider uppercase">
-                        Debugging Patterns
-                      </p>
-                    </div>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15, ease }}
+            className="mt-7 max-w-xl text-pretty text-lg leading-relaxed text-fg-muted"
+          >
+            I&apos;m <span className="text-fg">Atharv Shukla</span>. At Mentorgain I own a multi-tenant B2B platform end to
+            end — architecture, backend, web, AWS and SOC&nbsp;2. On the side I build and ship my own products: an agentic AI
+            platform, an enterprise identity API and a security-review copilot.
+          </motion.p>
 
-                    <h2 className="font-mono text-2xl md:text-3xl font-bold text-zinc-100 mb-3 group-hover:text-emerald-400 transition-colors">
-                      Production Debugging Case Studies
-                    </h2>
-                    <p className="text-zinc-400 leading-relaxed max-w-xl mb-6 font-mono text-sm">
-                      Common production patterns, how they break, and how to
-                      fix them. Real-world debugging for backend engineers.
-                    </p>
-
-                    {/* Latest incident previews */}
-                    <div className="space-y-2">
-                      {latest.map((inc) => (
-                        <div
-                          key={inc.id}
-                          className="flex items-center gap-3 text-sm font-mono"
-                        >
-                          <code className="text-[11px] text-zinc-600 bg-zinc-800/60 px-1.5 py-0.5 rounded">
-                            {inc.id}
-                          </code>
-                          <span
-                            className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                              inc.severity === "P0"
-                                ? "bg-red-500/10 text-red-400"
-                                : "bg-orange-500/10 text-orange-400"
-                            }`}
-                          >
-                            {inc.severity}
-                          </span>
-                          <span className="text-zinc-400 truncate">
-                            {inc.title}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right stats */}
-                  <div className="grid grid-cols-2 gap-3 lg:w-56 shrink-0">
-                    {incidentStats.map((stat) => (
-                      <div
-                        key={stat.label}
-                        className="rounded-lg p-3 text-center border border-zinc-800/50 bg-zinc-900/30"
-                      >
-                        <p className="text-lg font-mono font-bold text-zinc-100">
-                          {stat.value}
-                        </p>
-                        <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mt-0.5">
-                          {stat.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1 mt-6 text-sm font-mono text-zinc-500 group-hover:text-emerald-400 transition-colors">
-                  View all case studies
-                  <ArrowRight
-                    size={14}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </AnimatedSection>
-      </div>
-    </section>
-  );
-}
-
-function LatestPosts() {
-  const latest = blogPosts.slice(0, 3);
-
-  return (
-    <section className="py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <AnimatedSection>
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <p className="text-sm text-accent font-medium tracking-wider uppercase mb-2">
-                From the Blog
-              </p>
-              <h2 className="font-display text-3xl md:text-4xl font-semibold text-zinc-100">
-                Founding Engineer Chronicles
-              </h2>
-            </div>
-            <Link
-              href="/blog"
-              className="hidden sm:flex items-center gap-1 text-sm text-zinc-400 hover:text-accent transition-colors cursor-pointer"
-            >
-              All posts
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </AnimatedSection>
-
-        <div className="space-y-4">
-          {latest.map((post, i) => (
-            <AnimatedSection key={post.slug} delay={i * 0.1}>
-              <Link href={`/blog/${post.slug}`} className="block cursor-pointer">
-                <article className="group glass-light rounded-xl p-6 hover:border-zinc-600 transition-all duration-500">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-2">
-                        <time className="text-xs text-zinc-500 font-medium">
-                          {new Date(post.date).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
-                        </time>
-                        <span className="text-xs text-zinc-600">
-                          {post.readTime}
-                        </span>
-                      </div>
-                      <h3 className="font-display text-lg font-semibold text-zinc-100 group-hover:text-accent transition-colors mb-1">
-                        {post.title}
-                      </h3>
-                      <p className="text-sm text-zinc-400 line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                    </div>
-                    <ArrowUpRight
-                      size={20}
-                      className="text-zinc-600 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"
-                    />
-                  </div>
-                </article>
-              </Link>
-            </AnimatedSection>
-          ))}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25, ease }}
+            className="mt-9 flex flex-wrap items-center gap-3"
+          >
+            <Button href="/projects">See the work</Button>
+            <Button href={site.resume} variant="secondary" external>
+              <FileText size={15} /> Resume
+            </Button>
+            <span className="ml-1 hidden items-center gap-1.5 font-mono text-[12px] text-fg-dim sm:flex">
+              or press
+              <kbd className="inline-flex items-center gap-0.5 rounded border border-ink-600 bg-ink-850 px-1.5 py-0.5 text-[11px] text-fg-muted">
+                <Command size={10} />K
+              </kbd>
+            </span>
+          </motion.div>
         </div>
 
-        <AnimatedSection delay={0.3}>
-          <div className="mt-8 sm:hidden text-center">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1 text-sm text-zinc-400 hover:text-accent transition-colors cursor-pointer"
-            >
-              All posts
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </AnimatedSection>
+        <motion.div
+          initial={{ opacity: 0, y: 30, rotateX: 8 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{ duration: 0.9, delay: 0.2, ease }}
+          style={{ transformPerspective: 1200 }}
+        >
+          <Terminal />
+        </motion.div>
+      </Container>
+
+      <div className="relative overflow-hidden border-y border-ink-700 bg-ink-900/50 py-3.5">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-ink-950 to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-ink-950 to-transparent" />
+        <div className="flex w-max animate-marquee gap-10 font-mono text-[13px] text-fg-dim hover:[animation-play-state:paused]">
+          {[...MARQUEE, ...MARQUEE].map((t, i) => (
+            <span key={i} className="flex items-center gap-10">
+              {t} <span className="text-fg-faint">/</span>
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-function ContactCTA() {
+function Work() {
   return (
-    <section className="py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <AnimatedSection>
-          <div className="relative glass rounded-2xl p-12 md:p-16 text-center overflow-hidden">
-            {/* Background glow */}
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-violet-600/10 rounded-full blur-[80px]" />
-            </div>
-
-            <div className="relative z-10">
-              <h2 className="font-display text-3xl md:text-4xl font-semibold text-zinc-100 mb-4">
-                Let&apos;s build something together
-              </h2>
-              <p className="text-zinc-400 max-w-lg mx-auto mb-8 leading-relaxed">
-                Whether you have an idea, want to collaborate, or just want to
-                say hello — I&apos;d love to hear from you.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a
-                  href="mailto:atharvshukla.dev@gmail.com"
-                  className="group flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-zinc-950 font-medium rounded-lg transition-all duration-300 cursor-pointer"
-                >
-                  Get in Touch
-                  <ArrowRight
-                    size={16}
-                    className="group-hover:translate-x-1 transition-transform"
+    <Container className="py-24 md:py-32">
+      <SectionHeader
+        index="01"
+        label="selected work"
+        title="Three products, live in production."
+        description="Each one designed, built, tested and deployed by me — with a public demo, a narrated video and a full case study."
+        action={
+          <Link href="/projects" className="group hidden items-center gap-1.5 font-mono text-[13px] text-fg-dim hover:text-fg md:flex">
+            ls ~/projects <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        }
+      />
+      <Stagger className="grid gap-5 md:grid-cols-3">
+        {flagship.map((p, i) => (
+          <StaggerItem key={p.slug}>
+            <Link href={`/projects/${p.slug}`} className="group block h-full">
+              <motion.div
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                className="panel relative flex h-full flex-col overflow-hidden transition-colors group-hover:border-ink-500"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-ink-700 bg-black">
+                  <img
+                    src={p.video.poster}
+                    alt={`${p.name} preview`}
+                    loading="lazy"
+                    className="h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
                   />
-                </a>
-                <Link
-                  href="/contact"
-                  className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer"
-                >
-                  Or find me on socials
-                </Link>
+                  <div
+                    className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{ background: `linear-gradient(to top, ${p.color}33, transparent 60%)` }}
+                  />
+                  <span className="absolute left-3 top-3 rounded-md border border-white/10 bg-black/60 px-2 py-1 font-mono text-[10px] text-white/80 backdrop-blur">
+                    {String(i + 1).padStart(2, "0")} / {p.slug}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-semibold tracking-tight text-fg">{p.name}</h3>
+                    <StatusDot color={p.color} label="live" />
+                  </div>
+                  <p className="mt-1 text-sm text-fg-muted">{p.tagline}</p>
+                  <p className="mt-4 flex-1 font-mono text-[11px] leading-relaxed text-fg-dim">{p.stackLine.slice(0, 5).join(" · ")}</p>
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-fg-muted transition-colors group-hover:text-fg">
+                    Case study + demo
+                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
+          </StaggerItem>
+        ))}
+      </Stagger>
+    </Container>
+  );
+}
+
+function Experience() {
+  return (
+    <Container className="py-24">
+      <SectionHeader
+        index="02"
+        label="git log --experience"
+        title="Where I've been committing."
+        action={
+          <Link href="/about" className="group hidden items-center gap-1.5 font-mono text-[13px] text-fg-dim hover:text-fg md:flex">
+            cat ~/about.md <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        }
+      />
+      <GitLog entries={experience} compact />
+    </Container>
+  );
+}
+
+function Stack() {
+  return (
+    <Container className="py-24">
+      <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+        <div>
+          <SectionHeader
+            index="03"
+            label="how i work"
+            title="Principles I bring to a founding team."
+            className="mb-8"
+          />
+          <Stagger as="ol" className="space-y-6">
+            {PRINCIPLES.map(([t, d], i) => (
+              <StaggerItem as="li" key={t} className="grid grid-cols-[32px_1fr] gap-3">
+                <span className="font-mono text-[12px] text-accent">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <p className="font-medium text-fg">{t}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-fg-muted">{d}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+
+        <Reveal delay={0.1}>
+          <Window title="~/atharv/stack.json" bodyClassName="overflow-x-auto p-5 font-mono text-[12.5px] leading-[1.9]">
+            <p className="text-fg-dim">{"{"}</p>
+            {skills.map((g, gi) => (
+              <p key={g.group} className="pl-4">
+                <span className="text-sky-300/90">&quot;{g.group}&quot;</span>
+                <span className="text-fg-dim">: [</span>
+                {g.items.map((it, i) => (
+                  <span key={it}>
+                    <span className="text-amber-200/90">&quot;{it}&quot;</span>
+                    {i < g.items.length - 1 && <span className="text-fg-dim">, </span>}
+                  </span>
+                ))}
+                <span className="text-fg-dim">]{gi < skills.length - 1 ? "," : ""}</span>
+              </p>
+            ))}
+            <p className="text-fg-dim">{"}"}</p>
+          </Window>
+        </Reveal>
+      </div>
+    </Container>
+  );
+}
+
+function Writing() {
+  const columns = [
+    {
+      label: "blog",
+      href: "/blog",
+      items: [...blogPosts]
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 3)
+        .map((p) => ({ href: `/blog/${p.slug}`, title: p.title, meta: p.date })),
+    },
+    {
+      label: "guides",
+      href: "/integrations",
+      items: integrations.slice(0, 3).map((g) => ({ href: `/integrations/${g.slug}`, title: g.title, meta: g.platform })),
+    },
+    {
+      label: "postmortems",
+      href: "/incidents",
+      items: incidents.slice(0, 3).map((c) => ({ href: "/incidents", title: c.title, meta: `${c.id} · ${c.severity}` })),
+    },
+  ];
+
+  return (
+    <Container className="py-24">
+      <SectionHeader
+        index="04"
+        label="writing"
+        title="Notes from building in production."
+        description="Engineering write-ups on founding-engineer life, enterprise integrations, incidents and compliance."
+      />
+      <Stagger className="grid gap-5 md:grid-cols-3">
+        {columns.map((col) => (
+          <StaggerItem key={col.label} className="panel flex flex-col">
+            <div className="flex items-center justify-between border-b border-ink-700 px-5 py-3">
+              <p className="font-mono text-[12px] text-fg-muted">
+                <span className="text-fg-faint">~/</span>
+                {col.label}
+              </p>
+              <Link href={col.href} className="font-mono text-[11px] text-fg-dim hover:text-accent">
+                all →
+              </Link>
+            </div>
+            <ul className="flex-1 divide-y divide-ink-700">
+              {col.items.map((it) => (
+                <li key={it.title}>
+                  <Link href={it.href} className="group block px-5 py-4 transition-colors hover:bg-ink-850">
+                    <p className="font-mono text-[11px] text-fg-dim">{it.meta}</p>
+                    <p className="mt-1 text-[14px] leading-snug text-fg-muted transition-colors group-hover:text-fg">{it.title}</p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </StaggerItem>
+        ))}
+      </Stagger>
+    </Container>
+  );
+}
+
+function Contact() {
+  return (
+    <Container className="py-24">
+      <Reveal>
+        <div className="relative overflow-hidden rounded-2xl border border-ink-700 bg-ink-900 p-8 md:p-14">
+          <div aria-hidden className="pointer-events-none absolute inset-0 bg-dots opacity-60" />
+          <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
+          <div className="relative grid gap-10 md:grid-cols-[1.3fr_1fr] md:items-end">
+            <div>
+              <p className="label mb-4">
+                <span className="text-accent">05</span> <span className="text-fg-faint">//</span> contact
+              </p>
+              <h2 className="text-balance text-3xl font-semibold tracking-tight text-fg md:text-5xl">
+                Building something that has to work in production?
+              </h2>
+              <p className="mt-5 max-w-lg leading-relaxed text-fg-muted">
+                I like early teams, hard problems and owning the result. The fastest way to reach me is email.
+              </p>
+            </div>
+            <div className="space-y-3">
+              <div className="rounded-lg border border-ink-700 bg-ink-950 p-4 font-mono text-[12.5px]">
+                <p className="text-fg-dim">
+                  <span className="text-accent">$</span> mail -s &quot;hello&quot; \
+                </p>
+                <p className="break-all pl-4 text-fg">{site.email}</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button href={`mailto:${site.email}`} variant="accent" icon={false}>
+                  Send an email
+                </Button>
+                <Button href={site.linkedin} variant="secondary" external>
+                  LinkedIn
+                </Button>
               </div>
             </div>
           </div>
-        </AnimatedSection>
-      </div>
-    </section>
+        </div>
+      </Reveal>
+    </Container>
   );
 }
 
@@ -703,13 +348,12 @@ export default function Home() {
       <Head>
         <title>Atharv Shukla — Founding Engineer</title>
       </Head>
-      <HeroSection />
-      <FeaturedProjects />
-      <IntegrationsPreview />
-      <CompliancePreview />
-      <IncidentsPreview />
-      <LatestPosts />
-      <ContactCTA />
+      <Hero />
+      <Work />
+      <Experience />
+      <Stack />
+      <Writing />
+      <Contact />
     </>
   );
 }
